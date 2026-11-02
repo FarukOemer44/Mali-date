@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Date Quest">
+<meta name="theme-color" content="#1b1424">
+<title>Mali's Date Quest</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path fill='%23d84a52' d='M2 3h4v1h1v1h2V4h1V3h4v1h1v5h-1v1h-1v1h-1v1h-1v1h-1v1H7v-1H6v-1H5v-1H4v-1H3V9H2V8H1V4h1z'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+<canvas id="c" width="400" height="200"></canvas>
+
+<div id="hud" class="hidden">
+  <div class="hud-pill"><canvas data-icon="0" width="16" height="16"></canvas><span id="hud-hearts">0/7</span></div>
+  <div class="hud-pill"><canvas data-icon="4" width="16" height="16"></canvas><span id="hud-cats">0/5</span></div>
+</div>
+<button id="mute" class="icon-btn" aria-label="sound on/off"><canvas data-icon="6" width="16" height="16"></canvas></button>
+
+<div id="quest" class="hidden">
+  <div class="q-tag">quest</div>
+  <div class="q-head"><canvas data-icon="11" width="16" height="16"></canvas><span id="q-title"></span><b id="q-count"></b></div>
+  <div id="q-bar"><i></i></div>
+  <div id="q-sub"></div>
+  <ul id="q-list"></ul>
+  <div class="q-more"><span class="q-closed">tap for the list</span><span class="q-opened">tap to close</span></div>
+</div>
+
+<div id="label" class="hidden"></div>
+
+<!-- title menu -->
+<div id="menu" class="hidden">
+  <button class="pbtn green" data-act="continue" id="btn-continue">continue</button>
+  <button class="pbtn" data-act="new" id="btn-new">start</button>
+</div>
+
+<!-- dialogue -->
+<div id="dlg" class="hidden">
+  <div id="dlg-choices"></div>
+  <div class="dlg-row">
+    <div class="dlg-face"><canvas id="dlg-face" width="64" height="64"></canvas></div>
+    <div class="dlg-box">
+      <div id="dlg-name"></div>
+      <div id="dlg-text"></div>
+      <canvas id="dlg-next" width="8" height="8"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- panels: memory card, final screens -->
+<div id="panel" class="hidden"></div>
+
+<div id="toast" class="hidden"></div>
+
+<div id="loading"><div class="load-box"><div class="load-title">mali's date quest</div><div class="load-bar"><i id="load-fill"></i></div></div></div>
+
+<div id="rotate" class="hidden">
+  <canvas id="rotate-c" width="64" height="64"></canvas>
+  <p>turn your phone sideways</p>
+</div>
+
+<script src="js/config.js?v=10"></script>
+<script src="js/core.js?v=10"></script>
+<script src="js/world.js?v=10"></script>
+<script src="js/minigames.js?v=10"></script>
+<script src="js/fleaquest.js?v=10"></script>
+<script src="js/dates.js?v=10"></script>
+<script src="js/final.js?v=10"></script>
+<script src="js/main.js?v=10"></script>
+</body>
+</html>
