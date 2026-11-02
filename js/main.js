@@ -56,8 +56,10 @@ async function goFullscreen() {
   });
 }
 function updateFullBtn() {
-  $('#btn-full').classList.toggle('hidden', isStandalone() || !!fsElement());
-  $('#tip').classList.toggle('hidden', !(isIOS && !isStandalone()) || $('#menu').classList.contains('hidden'));
+  // on iPhone the fullscreen how-to lives on the "turn your phone sideways" screen instead
+  $('#btn-full').classList.toggle('hidden', isIOS || isStandalone() || !!fsElement());
+  $('#tip').classList.add('hidden');
+  $('#rotate-tip').classList.toggle('hidden', !(isIOS && !isStandalone()));
 }
 document.addEventListener('fullscreenchange', () => { updateFullBtn(); setTimeout(layout, 200); });
 document.addEventListener('webkitfullscreenchange', () => { updateFullBtn(); setTimeout(layout, 200); });
@@ -143,6 +145,7 @@ setInterval(() => {
 // ---------- boot ----------
 (async function boot() {
   layout();
+  updateFullBtn();
   await loadAssets((p) => { $('#load-fill').style.width = Math.round(p * 100) + '%'; });
   try { await document.fonts.ready; } catch (e) {}
   setMuted(muted);

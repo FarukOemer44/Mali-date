@@ -2,7 +2,7 @@
 // core: screen, assets, input, dialogue, audio, save, main loop
 
 const C = window.CONFIG;
-const VERSION = 11;
+const VERSION = 12;
 const TS = 16;
 let W = 400, H = 200, S = 2; // internal resolution + integer scale, set by layout()
 const $ = (s) => document.querySelector(s);

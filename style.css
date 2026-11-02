@@ -358,3 +358,11 @@ textarea.txt { height: calc(var(--u) * 40); }
   font: 600 calc(var(--u) * 6) 'Pixelify Sans', monospace; color: var(--cream);
   background: rgba(27, 20, 36, .7); text-shadow: 0 var(--u) 0 var(--ink);
 }
+
+#rotate-tip {
+  max-width: 300px; margin: 6px 24px 0; padding: 14px 16px; text-align: left;
+  font: 500 16px/1.4 'Pixelify Sans', monospace; color: var(--ink);
+  background: var(--cream); border: 3px solid var(--green-d); border-radius: 6px;
+}
+#rotate-tip ol { margin: 8px 0 8px 20px; padding: 0; }
+#rotate-tip span { font-size: 14px; opacity: .8; }
