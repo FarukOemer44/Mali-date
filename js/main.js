@@ -5,7 +5,11 @@ const titleScene = {
   t: 0,
   enter() { showHud(false); $('#label').classList.add('hidden'); this.place(); },
   resize() { this.place(); },
-  place() { $('#menu').style.top = Math.min(H - 64, 104) * S + 'px'; },
+  place() {
+    const top = Math.min(H - 64, 104);
+    $('#menu').style.top = top * S + 'px';
+    $('#tip').style.top = (top + 28) * S + 'px';
+  },
   update(dt) { this.t += dt; updateParticles(dt); if (Math.random() < dt * 0.8) burst(rnd(W * 0.2, W * 0.8), rnd(H * 0.55, H * 0.8), 'heart', 1); },
   draw() {
     const g = ctx, t = this.t;
@@ -23,17 +27,55 @@ const titleScene = {
   },
 };
 
+// ---------- fullscreen ----------
+// iPhone safari has no fullscreen api for web pages; there it's "hide toolbar" or a home screen app
+const isIOS = /iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1 && !document.documentElement.requestFullscreen);
+const isStandalone = () => window.navigator.standalone === true || matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: fullscreen)').matches;
+const fsElement = () => document.fullscreenElement || document.webkitFullscreenElement;
+function canFullscreen() { const el = document.documentElement; return !!(el.requestFullscreen || el.webkitRequestFullscreen); }
+async function goFullscreen() {
+  const el = document.documentElement;
+  if (canFullscreen()) {
+    try {
+      if (fsElement()) await (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+      else {
+        await (el.requestFullscreen || el.webkitRequestFullscreen).call(el, { navigationUI: 'hide' });
+        try { await screen.orientation.lock('landscape'); } catch (e) {}
+      }
+    } catch (e) { /* the browser said no */ }
+    setTimeout(layout, 300);
+    return;
+  }
+  await cardPanel({
+    title: 'fullscreen on iphone',
+    lines: [
+      '<b>quick way:</b> in safari, tap <b>aA</b> on the left of the address bar → <b>hide toolbar</b>.',
+      '<b>best way:</b> tap share → <b>add to home screen</b>, then open the game from your home screen. it runs like an app, without any bars.',
+    ],
+    button: 'got it',
+  });
+}
+function updateFullBtn() {
+  $('#btn-full').classList.toggle('hidden', isStandalone() || !!fsElement());
+  $('#tip').classList.toggle('hidden', !(isIOS && !isStandalone()) || $('#menu').classList.contains('hidden'));
+}
+document.addEventListener('fullscreenchange', () => { updateFullBtn(); setTimeout(layout, 200); });
+document.addEventListener('webkitfullscreenchange', () => { updateFullBtn(); setTimeout(layout, 200); });
+
 function showMenu() {
   $('#menu').classList.remove('hidden');
   $('#btn-continue').classList.toggle('hidden', !save.intro);
   $('#btn-new').textContent = save.intro ? 'new game' : 'start';
   $('#btn-new').classList.toggle('green', !save.intro);
+  updateFullBtn();
 }
 let menuBusy = false;
 $('#menu').addEventListener('click', async (e) => {
   const b = e.target.closest('[data-act]');
   if (!b || menuBusy) return;
+  if (b.dataset.act === 'full') { audioUnlock(); SFX.select(); goFullscreen(); return; }
   menuBusy = true;
+  $('#tip').classList.add('hidden');
   audioUnlock();
   SFX.select();
   $('#menu').classList.add('hidden');

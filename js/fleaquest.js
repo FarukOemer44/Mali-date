@@ -4,7 +4,7 @@
 
 const fightPad = Object.assign(document.createElement('div'), { id: 'fightpad', className: 'hidden' });
 const splashText = Object.assign(document.createElement('div'), { id: 'splash', className: 'hidden', textContent: 'it\'s adventure time!' });
-document.body.append(fightPad, splashText);
+document.getElementById('stage').append(fightPad, splashText);
 
 function fleaQuestGame() {
   const GROUND = 214, AGROUND = 222, STREET_W = 960;

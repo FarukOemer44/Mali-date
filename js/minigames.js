@@ -3,7 +3,7 @@
 
 const miniHud = Object.assign(document.createElement('div'), { id: 'minihud', className: 'hidden' });
 const miniTools = Object.assign(document.createElement('div'), { id: 'minitools', className: 'hidden' });
-document.body.append(miniHud, miniTools);
+document.getElementById('stage').append(miniHud, miniTools);
 function setHud(html) { miniHud.innerHTML = html; miniHud.classList.remove('hidden'); }
 function clearMiniUi() { miniHud.classList.add('hidden'); miniTools.classList.add('hidden'); miniHud.innerHTML = ''; miniTools.innerHTML = ''; }
 const fmtTime = (s) => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');

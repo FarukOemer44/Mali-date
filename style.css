@@ -345,3 +345,16 @@ textarea.txt { height: calc(var(--u) * 40); }
 
 /* Pixelify Sans turns "fi" into a broken ligature; the font shorthand resets ligatures, so force it off everywhere */
 *, *::before, *::after { font-variant-ligatures: none !important; font-feature-settings: "liga" 0, "clig" 0, "dlig" 0 !important; }
+
+/* the stage = the visible part of the screen (safari's bars excluded). transform makes it the
+   containing block for all the position:fixed ui inside it */
+#stage {
+  position: fixed; left: 0; top: 0; width: var(--vvw, 100vw); height: var(--vvh, 100vh); overflow: hidden;
+  transform: translate3d(0, var(--vvt, 0px), 0);
+}
+#tip {
+  position: fixed; z-index: 21; left: 50%; transform: translateX(-50%); white-space: nowrap; pointer-events: none;
+  padding: calc(var(--u) * 2) calc(var(--u) * 5); border-radius: calc(var(--u) * 3);
+  font: 600 calc(var(--u) * 6) 'Pixelify Sans', monospace; color: var(--cream);
+  background: rgba(27, 20, 36, .7); text-shadow: 0 var(--u) 0 var(--ink);
+}

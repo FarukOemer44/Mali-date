@@ -2,7 +2,7 @@
 // core: screen, assets, input, dialogue, audio, save, main loop
 
 const C = window.CONFIG;
-const VERSION = 10;
+const VERSION = 11;
 const TS = 16;
 let W = 400, H = 200, S = 2; // internal resolution + integer scale, set by layout()
 const $ = (s) => document.querySelector(s);
@@ -18,7 +18,13 @@ const isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;
 
 // ---------- screen: fill the whole phone, crisp integer scaling ----------
 function layout() {
-  const vw = window.innerWidth, vh = window.innerHeight;
+  // use the area safari really shows (its toolbars eat into the top in landscape)
+  const vv = window.visualViewport;
+  const vw = Math.round(vv ? vv.width : window.innerWidth), vh = Math.round(vv ? vv.height : window.innerHeight);
+  const root = document.documentElement.style;
+  root.setProperty('--vvw', vw + 'px'); root.setProperty('--vvh', vh + 'px');
+  root.setProperty('--vvt', (vv ? Math.round(vv.offsetTop) : 0) + 'px');
+  if (window.scrollY) window.scrollTo(0, 0);
   const portrait = vh > vw;
   S = Math.max(1, Math.round(Math.min(vh / 200, vw / 330)));
   W = Math.ceil(vw / S); H = Math.ceil(vh / S);
@@ -31,6 +37,7 @@ function layout() {
 }
 addEventListener('resize', layout);
 addEventListener('orientationchange', () => setTimeout(layout, 250));
+if (window.visualViewport) { visualViewport.addEventListener('resize', layout); visualViewport.addEventListener('scroll', layout); }
 document.addEventListener('gesturestart', (e) => e.preventDefault());
 document.addEventListener('dblclick', (e) => e.preventDefault());
 document.addEventListener('touchmove', (e) => { if (!e.target.closest('.card')) e.preventDefault(); }, { passive: false });
@@ -228,7 +235,7 @@ addEventListener('blur', () => { for (const k in keys) keys[k] = 0; });
 
 // pointer on the canvas, in game pixels. scenes can implement pointer(type, x, y)
 const ptr = { x: 0, y: 0, down: false, tap: false, up: false, sx: 0, sy: 0, moved: false };
-function toGame(e) { return { x: e.clientX / S, y: e.clientY / S }; }
+function toGame(e) { const r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) / S, y: (e.clientY - r.top) / S }; }
 cv.addEventListener('pointerdown', (e) => {
   audioUnlock();
   const p = toGame(e);
@@ -489,15 +496,16 @@ function setupRunaway(b, giveUp) {
       b.classList.add('green');
       return;
     }
+    const st = $('#stage').getBoundingClientRect();
     if (!b.classList.contains('runaway')) {
       const r = b.getBoundingClientRect();
       b.classList.add('runaway');
-      document.body.appendChild(b);
-      b.style.left = r.left + 'px'; b.style.top = r.top + 'px';
+      $('#stage').appendChild(b);
+      b.style.left = r.left - st.left + 'px'; b.style.top = r.top - st.top + 'px';
     }
     const bw = b.offsetWidth, bh = b.offsetHeight;
-    b.style.left = rnd(innerWidth * 0.08, innerWidth * 0.92 - bw) + 'px';
-    b.style.top = rnd(innerHeight * 0.08, innerHeight * 0.5 - bh) + 'px';
+    b.style.left = rnd(st.width * 0.08, st.width * 0.92 - bw) + 'px';
+    b.style.top = rnd(st.height * 0.08, st.height * 0.5 - bh) + 'px';
     const lines = ['nope', 'nice try', 'hehe', 'too slow', 'not today', 'almost', 'u sure?'];
     b.textContent = lines[(dodges - 1) % lines.length];
   };

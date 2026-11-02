@@ -13,9 +13,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=10">
+<link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
+<!-- everything lives in #stage, which is sized to the part of the screen Safari really shows -->
+<div id="stage">
 <canvas id="c" width="400" height="200"></canvas>
 
 <div id="hud" class="hidden">
@@ -39,7 +41,9 @@
 <div id="menu" class="hidden">
   <button class="pbtn green" data-act="continue" id="btn-continue">continue</button>
   <button class="pbtn" data-act="new" id="btn-new">start</button>
+  <button class="pbtn" data-act="full" id="btn-full">⛶ fullscreen</button>
 </div>
+<div id="tip" class="hidden">tip: in safari tap share → "add to home screen", then open it from there for fullscreen</div>
 
 <!-- dialogue -->
 <div id="dlg" class="hidden">
@@ -65,14 +69,15 @@
   <canvas id="rotate-c" width="64" height="64"></canvas>
   <p>turn your phone sideways</p>
 </div>
+</div>
 
-<script src="js/config.js?v=10"></script>
-<script src="js/core.js?v=10"></script>
-<script src="js/world.js?v=10"></script>
-<script src="js/minigames.js?v=10"></script>
-<script src="js/fleaquest.js?v=10"></script>
-<script src="js/dates.js?v=10"></script>
-<script src="js/final.js?v=10"></script>
-<script src="js/main.js?v=10"></script>
+<script src="js/config.js?v=11"></script>
+<script src="js/core.js?v=11"></script>
+<script src="js/world.js?v=11"></script>
+<script src="js/minigames.js?v=11"></script>
+<script src="js/fleaquest.js?v=11"></script>
+<script src="js/dates.js?v=11"></script>
+<script src="js/final.js?v=11"></script>
+<script src="js/main.js?v=11"></script>
 </body>
 </html>
