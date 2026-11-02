@@ -2,7 +2,7 @@
 // core: screen, assets, input, dialogue, audio, save, main loop
 
 const C = window.CONFIG;
-const VERSION = 12;
+const VERSION = 13;
 const TS = 16;
 let W = 400, H = 200, S = 2; // internal resolution + integer scale, set by layout()
 const $ = (s) => document.querySelector(s);
@@ -551,9 +551,9 @@ let lastQuestStage = null;
 function updateQuest() {
   const n = doneCount(), total = C.dates.length;
   let stage, title, count = '', sub, pct;
-  if (save.submitted) { stage = 'end'; title = 'it\'s a date ♥'; sub = 'you picked: ' + save.submitted.title + '. that\'s the end, you can keep exploring'; pct = 100; }
-  else if (n >= total) { stage = 'fountain'; title = 'meet me at the fountain'; sub = 'last step: pick the date we actually do + the day'; pct = 90; }
-  else { stage = 'dates'; title = 'try all ' + total + ' date spots'; count = n + '/' + total; sub = 'then pick the real one at the fountain ♥ (the yellow ! shows where)'; pct = Math.round((n / total) * 80); }
+  if (save.submitted) { stage = 'end'; title = 'it\'s a date ♥'; count = '♥'; sub = ''; pct = 100; }
+  else if (n >= total) { stage = 'fountain'; title = 'go to the fountain'; count = '♥'; sub = ''; pct = 90; }
+  else { stage = 'dates'; title = 'date spots'; count = n + '/' + total; sub = ''; pct = Math.round((n / total) * 80); }
   $('#q-title').textContent = title;
   $('#q-count').textContent = count;
   $('#q-sub').textContent = sub;
@@ -562,14 +562,27 @@ function updateQuest() {
   items.push(`<li class="final ${n >= total ? '' : 'locked'} ${save.submitted ? 'done' : ''}"><i></i>fountain: pick our date ♥</li>`);
   $('#q-list').innerHTML = items.join('');
   const q = $('#quest');
-  if (lastQuestStage && stage !== lastQuestStage) { q.classList.remove('pulse'); void q.offsetWidth; q.classList.add('pulse'); }
+  if (lastQuestStage && stage !== lastQuestStage) {
+    q.classList.remove('pulse'); void q.offsetWidth; q.classList.add('pulse');
+    // new objective: pop the box open for a moment even if it's folded into the icon
+    if (questMini) { q.classList.remove('mini'); clearTimeout(updateQuest._t); updateQuest._t = setTimeout(() => { if (questMini) q.classList.add('mini'); }, 4500); }
+  }
   lastQuestStage = stage;
 }
-$('#quest').addEventListener('click', (e) => { e.stopPropagation(); audioUnlock(); SFX.blip('x'); $('#quest').classList.toggle('open'); });
+// tap the quest box to fold it into a small icon (and back). remembered per phone
+let questMini = false;
+try { questMini = localStorage.getItem('mdq-quest-mini') === '1'; } catch (e) {}
+$('#quest').classList.toggle('mini', questMini);
+$('#quest').addEventListener('click', (e) => {
+  e.stopPropagation(); audioUnlock(); SFX.blip('x');
+  questMini = !questMini;
+  clearTimeout(updateQuest._t);
+  $('#quest').classList.toggle('mini', questMini);
+  try { localStorage.setItem('mdq-quest-mini', questMini ? '1' : '0'); } catch (err) {}
+});
 function showHud(on) {
   $('#hud').classList.toggle('hidden', !on);
   $('#quest').classList.toggle('hidden', !on);
-  if (!on) $('#quest').classList.remove('open');
   if (on) updateHud();
 }
 

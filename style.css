@@ -366,3 +366,21 @@ textarea.txt { height: calc(var(--u) * 40); }
 }
 #rotate-tip ol { margin: 8px 0 8px 20px; padding: 0; }
 #rotate-tip span { font-size: 14px; opacity: .8; }
+
+/* compact quest box; tap folds it into a small pill like the hud */
+#quest { width: calc(var(--u) * 92); padding: 0 calc(var(--u) * 2) calc(var(--u) * 1); border-width: calc(var(--u) * 6); border-image-width: calc(var(--u) * 6); }
+#quest .q-tag { font-size: calc(var(--u) * 4.5); }
+#quest .q-head { margin-top: 0; gap: calc(var(--u) * 2); }
+#quest .q-head canvas { width: calc(var(--u) * 12); height: calc(var(--u) * 12); }
+#q-title, #q-count { font-size: calc(var(--u) * 6.5); }
+#q-bar { height: calc(var(--u) * 2); margin: calc(var(--u) * 2) 0 0; }
+#q-sub, #q-list, #quest .q-more { display: none !important; }
+#quest.mini {
+  width: auto; height: calc(var(--u) * 20); padding: 0 calc(var(--u) * 5) 0 calc(var(--u) * 3);
+  display: flex; align-items: center;
+  border: var(--u) solid rgba(255, 247, 230, .5); border-image: none; border-radius: calc(var(--u) * 10);
+  background: rgba(27, 20, 36, .72); color: var(--cream);
+}
+#quest.mini .q-tag, #quest.mini #q-title, #quest.mini #q-bar { display: none; }
+#quest.mini .q-head canvas { width: calc(var(--u) * 16); height: calc(var(--u) * 16); }
+#quest.mini #q-count { font-size: calc(var(--u) * 8); color: var(--cream); text-shadow: 0 var(--u) 0 var(--ink); }
